@@ -1,9 +1,10 @@
-[README.md](https://github.com/user-attachments/files/34589421/README.md)
 # Periodic response and pull-in analysis of a graphene-motivated electrostatic MEMS model — code and parameters
 
 Companion code for O. Eshkobilov and S. Kadyrov, *Periodic Response and Pull-in Analysis of a
 Graphene-Motivated Electrostatic MEMS Model*, Communications in Nonlinear Science and Numerical
 Simulation (manuscript CNSNS-D-26-01407).
+
+Repository: https://github.com/shiralikadyrov/Periodic_Response_Pull_in (package version 1.1.0).
 
 Model (dimensionless):
 
@@ -14,13 +15,15 @@ Model (dimensionless):
 | Path | Purpose |
 |---|---|
 | `notebooks/01_master_analysis.ipynb` | Production notebook. Cells 1–17: library (full ODE, shooting/Floquet, exact- and truncated-force HB, pseudo-arclength continuation, exact-rational Sturm construction, basin/DIC). Cells 18–43: every study in the article, regression checks, metadata. Shipped with outputs from the production run. |
-| `notebooks/02_figures_4_5_layout.ipynb` | Regenerates Figures 4–5 with the final panel layout. The integrity counts produced by cell 34 of notebook 01 are embedded in the notebook. |
+| `notebooks/02_figures_4_5_layout.ipynb` | Regenerates Figures 4–5 with the final panel layout. It reads `data_full_integrity_charts_corrected.npz` (written by cell 34 of notebook 01) if present, and otherwise uses the production integrity counts embedded in the notebook. |
 | `scripts/timing_benchmark.py` | Standalone timing comparison (Table 7). Loads library cells 1–17 from the master notebook, so it runs exactly the production functions. |
 | `parameters/numerical_protocol.json` | Model defaults, shooting ODE tolerances, basin/DIC protocol, HB gates, random seed, run profile. |
 | `parameters/study_parameters.json` | Parameter sets for each figure and table. Exact rationals are given as strings. |
 | `results/timing_benchmark_*.csv` | Per-load and summary timings reported in Table 7. |
 
 ## Map from article to code
+
+Each computational figure and table maps to the notebook cell, script, or parameter file that produces it. Figure 1 (model schematic) is drawn directly in the LaTeX source.
 
 | Article item | Notebook cell(s) / script | Function(s) |
 |---|---|---|
@@ -49,9 +52,10 @@ jupyter nbconvert --to notebook --execute notebooks/01_master_analysis.ipynb --o
 python scripts/timing_benchmark.py
 ```
 
-Outputs are written to `/content/...` on Colab and to `/mnt/data/CNSNS_second_revision_outputs`
-otherwise; edit `OUTPUT_DIR` in cell 1 to change this. Cell 43 runs scientific regression checks
-against the values reported in the article.
+Outputs go to the directory named by the environment variable `CNSNS_OUTPUT_DIR`. If it is unset, they go
+to `outputs/` relative to the working directory, or to `/content/...` on Colab. Cell 43 runs scientific
+regression checks against the values reported in the article. The stored outputs of cell 1 in the
+executed notebook show the output path of the original production runtime.
 
 The production run used Python 3.12.13, NumPy 2.0.2, SciPy 1.16.3, SymPy 1.14.0, pandas 2.2.2 and
 Matplotlib 3.10.0. The timing benchmark used Python 3.11.18, NumPy 2.4.6, SciPy 1.17.1 and
